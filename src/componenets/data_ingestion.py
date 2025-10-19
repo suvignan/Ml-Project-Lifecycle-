@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
-from src.components.data_transformation import DataTransformation
+from src.componenets.data_transformation import DataTransformation
 @dataclass
 class DataIngestionConfig:
     train_data_path:str=os.path.join('artifacts','train.csv')
@@ -23,7 +23,7 @@ class DataIngestion:
             df = pd.read_csv('notebook/data/stud.csv')
             logging.info("Dataset read as pandas dataframe")
 
-            os.makedirs(os.path.dirname(self.ingestion_config.train_data_split),exist_ok=True)
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
             logging.info("Train Test Split Initiated")

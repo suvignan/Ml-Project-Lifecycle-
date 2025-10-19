@@ -16,7 +16,7 @@ from xgboost import XGBRegressor
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utlis import save_object,evaluate_models
+from src.utils import save_object,evaluate_models
 
 @dataclass
 class ModelTrainerConfig:
@@ -54,7 +54,7 @@ class ModelTrainer:
                 },
                 "Random Forest":{
                     # 'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
-                 
+
                     # 'max_features':['sqrt','log2',None],
                     'n_estimators': [8,16,32,64,128,256]
                 },
@@ -67,7 +67,12 @@ class ModelTrainer:
                     'n_estimators': [8,16,32,64,128,256]
                 },
                 "Linear Regression":{},
-                "XGBRegressor":{
+                "K-Neighbours Regressor": {
+                    'n_neighbors': [3, 5, 7, 9],
+                    'weights': ['uniform', 'distance'],
+                    'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']
+                },
+                "XGB Regressor":{
                     'learning_rate':[.1,.01,.05,.001],
                     'n_estimators': [8,16,32,64,128,256]
                 },
@@ -81,7 +86,7 @@ class ModelTrainer:
                     # 'loss':['linear','square','exponential'],
                     'n_estimators': [8,16,32,64,128,256]
                 }
-                
+
             }
 
             model_report:dict =evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models

@@ -21,9 +21,9 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         try:
-            numeric_features = ['math_score','reading_score','writing_score']
+            numeric_features = ['reading_score','writing_score']
             categorical_features = [
-                'gender','race','parental_level_of_education','lunch','test_preparation_course'
+                'gender','race_ethnicity','parental_level_of_education','lunch','test_preparation_course'
                 ]
             num_pipeline =Pipeline(
                 steps =[
@@ -35,7 +35,7 @@ class DataTransformation:
                 steps=[
                     ("imputer",SimpleImputer(strategy='most_frequent')),
                     ('oneHotencoder',OneHotEncoder()),
-                    ('scaler',StandardScaler())
+                    ('scaler',StandardScaler(with_mean=False))
                 ]
             )
             logging.info(f"Categorical Columns: {categorical_features}")
@@ -75,7 +75,7 @@ class DataTransformation:
             input_feature_train_array =preprocessor_obj.fit_transform(input_feature_train_df)
             input_feature_test_array =preprocessor_obj.transform(input_feature_test_df)
 
-            train_arr =np.c_[input_feature_test_array,np.array(target_feature_train_df)]
+            train_arr =np.c_[input_feature_train_array,np.array(target_feature_train_df)]
             test_arr =np.c_[input_feature_test_array,np.array(target_feature_test_df)]
             logging.info("Train array created successfully")
 
@@ -90,5 +90,5 @@ class DataTransformation:
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
 
-        except:
-            pass
+        except Exception as e:
+            raise CustomException(e, sys)
